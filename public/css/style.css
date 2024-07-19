@@ -1,0 +1,137 @@
+body,
+html {
+	color: #fff;
+	height: 100%;
+	width: 100%;
+	background: #ccc;
+}
+
+.chat-area {
+	background-color: #ffffff;
+	color: #000000;
+	padding: 10px;
+	border: 1px solid #ccc;
+}
+
+a {
+	color: #727b8d;
+	text-decoration: none;
+}
+
+a:hover,
+a:focus,
+a:active {
+	color: #6B8E23;
+}
+
+.login {
+	width: 100%;
+	padding: 10px;
+
+	label {
+		color: #888;
+
+	}
+
+	.form-control {
+		border-radius: 0;
+		-webkit-border-radius: 0;
+		-moz-border-radius: 0;
+		padding-top: 20px;
+		padding-bottom: 20px;
+		border-color: #999;
+		color: #000;
+		font-weight: bolder;
+	}
+
+	.btn,
+	.btn:focus,
+	.btn:active,
+	.btn:hover {
+		border-radius: 2px;
+		border: solid 1px #b1b1b3;
+		background: #727b8d;
+		font-size: 16px;
+		font-weight: bold;
+		padding: 10px;
+		outline: none;
+		color: #ffffff;
+	}
+
+	.help-block {
+		text-align: left;
+		color: #979fb3;
+		display: block;
+	}
+
+	.signup,
+	.signup:hover,
+	.signup:focus,
+	.signup:active {
+		text-align: center;
+		margin-top: 10px;
+		background: #6B8E23 !important;
+		border: solid 2px #aaa;
+	}
+}
+
+
+.navbar-default {
+	background: #505c75;
+	border: none;
+	border-radius: 0;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	min-height: 0;
+	height: 35px !important;
+
+	.navbar-brand {
+		color: #fff;
+		padding: 0;
+		line-height: 35px;
+		padding-left: 5px;
+		font-weight: bolder;
+	}
+
+	#first-btn {
+		-webkit-border-radius: 0;
+		-moz-border-radius: 0;
+		-ms-border-radius: 0;
+		border-radius: 0;
+		border: none;
+		color: #fff;
+		font-weight: 100;
+		border: solid 1px #c2cee4;
+		padding: 4px 15px;
+		background: #6B8E23;
+		position: absolute;
+		top: 10px;
+		right: 0;
+	}
+
+	#second-btn {
+		-webkit-border-radius: 0;
+		-moz-border-radius: 0;
+		-ms-border-radius: 0;
+		border-radius: 0;
+		border: none;
+		color: #fff;
+		font-weight: 100;
+		border: solid 1px #c2cee4;
+		padding: 4px 15px;
+		background: #6B8E23;
+		position: absolute;
+		top: 10px;
+		right: 125px;
+	}
+}
+
+footer {
+	background: #444;
+	color: #999;
+	padding: 10px;
+
+	#copyright {
+		color: #fff;
+	}
+}

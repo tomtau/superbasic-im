@@ -1,0 +1,46 @@
+{
+  "name": "superbasic-im",
+  "version": "0.0.1",
+  "description": "Super Basic IM: a web-proxy for WhatsApp Web that works on dumbphones",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run compile && ln -s ../views ./dist/views && ln -s ../public ./dist/public && mkdir -p dist/media",
+    "lint": "gts lint",
+    "clean": "gts clean",
+    "compile": "tsc",
+    "fix": "gts fix",
+    "prepare": "npm run compile",
+    "pretest": "npm run compile",
+    "posttest": "npm run lint"
+  },
+  "author": "tomtau",
+  "license": "MPL-2.0",
+  "dependencies": {
+    "@hapi/boom": "^10.0.1",
+    "@hapi/cookie": "^12.0.1",
+    "@hapi/crumb": "^9.0.1",
+    "@hapi/hapi": "^21.3.9",
+    "@hapi/inert": "^7.1.0",
+    "@hapi/vision": "^7.0.3",
+    "argon2": "^0.40.3",
+    "handlebars": "^4.7.8",
+    "mime-types": "^2.1.35",
+    "node-cache": "^5.1.2",
+    "node-emoji": "^2.1.3",
+    "qrcode": "^1.5.3",
+    "readline": "^1.3.0",
+    "typescript": "^5.4.5",
+    "vcards-js": "^2.10.0",
+    "whatsapp-web.js": "github:pedroslopez/whatsapp-web.js#webpack-exodus"
+  },
+  "devDependencies": {
+    "@types/hapi__cookie": "^12.0.5",
+    "@types/hapi__crumb": "^7.3.7",
+    "@types/mime-types": "^2.1.4",
+    "@types/node": "20.12.7",
+    "@types/qrcode": "^1.5.5",
+    "@types/vcards-js": "^2.10.5",
+    "gts": "^5.3.1",
+    "typescript": "^5.4.3"
+  }
+}

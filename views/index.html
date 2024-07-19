@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+<title>SuperBasic IM</title>
+<link href="/public/css/style.css" rel="stylesheet">
+<meta name="theme-color" content="#305">
+<meta name="viewport" content="width=device-width">
+</head>
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="/">SuperBasic IM</a>
+          </div>
+      
+          <div>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="/contacts" class="btn btn-success" id="first-btn">Contacts</a></li>
+            </ul>
+          </div><!-- /.navbar-collapse -->
+        </div>
+        </div>
+      </nav>
+<div class="chat-area">
+    <table>
+        <tbody>
+        {{#each chats}}
+            <tr><td>
+                <a href="/chats/{{this.id}}">{{#if this.hasUnread}}
+                    <strong>{{this.name}}</strong>
+                {{else}}
+                    {{this.name}}    
+                {{/if}}</a>
+            
+            </td></tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
