@@ -70,7 +70,42 @@ export const new_chat_post_handler = async (
   return h.redirect('/chats/' + to);
 };
 
-export const chats_handler = async (
+export const recent_chats_handler = async (
+  _request: Request<ReqRefDefaults>,
+  h: ResponseToolkit<ReqRefDefaults>
+) => {
+  let chats = await client.getChats();
+  // TODO: give proper types
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const chats_txt: any[] = [];
+  chats = chats.sort((a, b) => {
+    const aa = a.timestamp;
+    const bb = b.timestamp;
+    return bb - aa;
+  });
+  chats = chats.slice(0, 20);
+  for (let i = 0; i < chats.length; i++) {
+    const chat = chats[i];
+    const contact = await chat.getContact();
+    let name = waContactToName(contact, true);
+    name =
+      name +
+      ' (' +
+      chat.unreadCount +
+      ' unread, ' +
+      longNumToDate(chat.timestamp) +
+      ')';
+    const chat_obj = {
+      name: name,
+      hasUnread: chat.unreadCount > 0,
+      id: encodeURIComponent(chat.id._serialized),
+    };
+    chats_txt.push(chat_obj);
+  }
+  return h.view('index', {chats: chats_txt});
+};
+
+export const all_chats_handler = async (
   _request: Request<ReqRefDefaults>,
   h: ResponseToolkit<ReqRefDefaults>
 ) => {

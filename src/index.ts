@@ -17,7 +17,8 @@ import {
   new_chat_or_pair_handler,
   contacts_handler,
   media_handler,
-  chats_handler,
+  recent_chats_handler,
+  all_chats_handler,
   new_chat_post_handler,
   reply_handler,
   vcard_handler,
@@ -174,7 +175,12 @@ export const init = async function (): Promise<Server> {
     {
       method: 'GET',
       path: '/chats',
-      handler: chats_handler,
+      handler: all_chats_handler,
+    },
+    {
+      method: 'GET',
+      path: '/recentchats',
+      handler: recent_chats_handler,
     },
     {
       method: 'GET',
