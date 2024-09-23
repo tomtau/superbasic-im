@@ -16,6 +16,9 @@
           <div>
             <ul class="nav navbar-nav navbar-right">
               <li><a href="/chats/{{chat_id}}/vcard" class="btn btn-success" id="first-btn">Download Vcard</a></li>
+	      {{#if chat_unreadMessages}}
+	      <li><a href="/chats/{{chat_id}}/seen" class="btn btn-success" id="first-btn">Mark all messages as read</a></li>
+	      {{/if}}
             </ul>
           </div><!-- /.navbar-collapse -->
         </div>
