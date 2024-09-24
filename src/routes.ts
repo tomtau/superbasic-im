@@ -47,6 +47,17 @@ export const reply_handler = async (
   return h.redirect('/chats/' + request.params.chat_id);
 };
 
+export const read_all_handler = async (
+  request: Request<ReqRefDefaults>,
+  h: ResponseToolkit<ReqRefDefaults>
+) => {
+  // TODO: give proper types
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  await client.sendSeen(request.params.chat_id);
+
+  return h.redirect('/chats/' + request.params.chat_id);
+};
+
 export const new_chat_post_handler = async (
   request: Request<ReqRefDefaults>,
   h: ResponseToolkit<ReqRefDefaults>
@@ -172,6 +183,7 @@ export const chat_handler = async (
 ) => {
   const chat = await client.getChatById(request.params.chat_id);
   const messages = await chat.fetchMessages({limit: 10});
+  const unreadMessages: boolean = chat.unreadCount > 0;
   const fmtMsg: {
     from: string;
     msg: string[];
@@ -211,6 +223,7 @@ export const chat_handler = async (
   }
   return h.view('chats', {
     messages: fmtMsg,
+    chat_unreadMessages: unreadMessages,
     chat_id: request.params.chat_id,
   });
 };
