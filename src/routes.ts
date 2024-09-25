@@ -6,6 +6,7 @@ import {
   getUserContacts,
   longNumToDate,
   pairQr,
+  unreadChats,
 } from './client';
 import {ReqRefDefaults, Request, ResponseToolkit} from '@hapi/hapi';
 import fs from 'fs';
@@ -238,7 +239,10 @@ export const new_chat_or_pair_handler = async (
     return h.view('pair', {qr: pairQr});
   } else {
     const users = await getUserContacts();
-
-    return h.view('new', {users: users});
+    let totalUnreadMessages = 0;
+    unreadChats.forEach((value) => {
+      totalUnreadMessages += value;
+    });
+    return h.view('new', {users: users, totalUnreadMessages: totalUnreadMessages});
   }
 };
