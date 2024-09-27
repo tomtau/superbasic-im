@@ -76,7 +76,7 @@ client.on('message_create', async msg => {
 client.on('unread_count', async (chat) => {
   const chatid = encodeURIComponent(chat.id._serialized);
   if(chat.unreadCount == 0){
-    if(unreadChats.has(chatid)) unreadChats.delete(chatid);
+    unreadChats.delete(chatid);
   }
   else {
     unreadChats.set(chatid,chat.unreadCount);
