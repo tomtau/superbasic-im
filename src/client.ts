@@ -21,11 +21,6 @@ client.once('ready', async () => {
   console.log('Client is ready!');
   //Initial fetch of unreadChats
   let chats = await client.getChats();
-  chats = chats.sort((a, b) => {
-    const aa = a.timestamp;
-    const bb = b.timestamp;
-    return bb - aa;
-  });
   for (let i = 0; i < chats.length; i++) {
      const chat = chats[i];
      if (chat.unreadCount > 0) {
