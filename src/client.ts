@@ -14,10 +14,20 @@ export const client = new WAClient({
   authStrategy: new LocalAuth(),
 });
 export let pairQr: string | null = null;
+export let unreadChats: Map<string,number> = new Map<string, number>();
 
 // When the client is ready, run this code (only once)
-client.once('ready', () => {
+client.once('ready', async () => {
   console.log('Client is ready!');
+  //Initial fetch of unreadChats
+  let chats = await client.getChats();
+  for (let i = 0; i < chats.length; i++) {
+     const chat = chats[i];
+     if (chat.unreadCount > 0) {
+       const chatid = encodeURIComponent(chat.id._serialized);
+       unreadChats.set(chatid, chat.unreadCount);
+     }
+  }
 });
 
 // When the client received QR-Code
@@ -61,6 +71,18 @@ client.on('message_create', async msg => {
     );
   }
 });
+
+// Update unreadChats every time there is an unread_count event
+client.on('unread_count', async (chat) => {
+  const chatid = encodeURIComponent(chat.id._serialized);
+  if(chat.unreadCount == 0){
+    unreadChats.delete(chatid);
+  }
+  else {
+    unreadChats.set(chatid,chat.unreadCount);
+  }
+});
+
 
 // TODO: give a proper return type
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
