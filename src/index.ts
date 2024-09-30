@@ -22,7 +22,7 @@ import {
   new_chat_post_handler,
   reply_handler,
   vcard_handler,
-  read_all_handler
+  read_all_handler,
 } from './routes';
 
 export let server: Server;

@@ -240,9 +240,12 @@ export const new_chat_or_pair_handler = async (
   } else {
     const users = await getUserContacts();
     let totalUnreadMessages = 0;
-    unreadChats.forEach((value) => {
+    unreadChats.forEach(value => {
       totalUnreadMessages += value;
     });
-    return h.view('new', {users: users, totalUnreadMessages: totalUnreadMessages});
+    return h.view('new', {
+      users: users,
+      totalUnreadMessages: totalUnreadMessages,
+    });
   }
 };
