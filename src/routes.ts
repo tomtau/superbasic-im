@@ -191,7 +191,11 @@ export const chat_handler = async (
     time: string;
     fromMe: boolean;
     media: boolean;
+    hasReaction: boolean;
+    hasQuotedMessage: boolean;
     id: string;
+    repliedMessage: string;
+    showDetails: boolean;
   }[] = [];
   for (let i = 0; i < messages.length; i++) {
     const message = messages[i];
@@ -203,13 +207,32 @@ export const chat_handler = async (
 
     const contact = await client.getContactById(nameId);
     const name = waContactToName(contact, false);
+    let repliedMessageInfo = '';
+    const showDetailsOption = message.hasQuotedMsg || message.hasReaction;
+
+    if (message.hasQuotedMsg) {
+      const repliedMessage = await message.getQuotedMessage();
+      const repliedTime = longNumToDate(repliedMessage.timestamp);
+      const repliedNameId = repliedMessage.author || message.from;
+      const repliedContact = await client.getContactById(repliedNameId);
+      const repliedName = waContactToName(repliedContact, false);
+      let repliedMsg = repliedMessage.body;
+      repliedMsg = emoji.unemojify(repliedMsg);
+      repliedMessageInfo =
+        repliedName + ' (' + repliedTime + '): ' + repliedMsg;
+    }
+
     fmtMsg.push({
       from: name,
       msg: msg.map(m => emoji.unemojify(m)),
       time: longNumToDate(time),
       fromMe: fromMe,
       media: message.hasMedia,
+      hasReaction: message.hasReaction,
+      hasQuotedMessage: message.hasQuotedMsg,
       id: encodeURIComponent(message.id._serialized),
+      repliedMessage: repliedMessageInfo,
+      showDetails: showDetailsOption,
     });
   }
   if (fmtMsg.length === 0) {
@@ -219,7 +242,11 @@ export const chat_handler = async (
       time: '',
       fromMe: false,
       media: false,
+      hasReaction: false,
+      hasQuotedMessage: false,
       id: '',
+      repliedMessage: '',
+      showDetails: false,
     });
   }
   return h.view('chats', {
