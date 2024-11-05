@@ -213,7 +213,7 @@ export const chat_handler = async (
     if (message.hasQuotedMsg) {
       const repliedMessage = await message.getQuotedMessage();
       const repliedTime = longNumToDate(repliedMessage.timestamp);
-      const repliedNameId = repliedMessage.author || message.from;
+      const repliedNameId = repliedMessage.author || repliedMessage.from;
       const repliedContact = await client.getContactById(repliedNameId);
       const repliedName = waContactToName(repliedContact, false);
       let repliedMsg = repliedMessage.body;
