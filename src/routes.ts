@@ -196,6 +196,7 @@ export const chat_handler = async (
     id: string;
     repliedMessage: string;
     showDetails: boolean;
+    reactionsDetails: string[];
   }[] = [];
   for (let i = 0; i < messages.length; i++) {
     const message = messages[i];
@@ -209,6 +210,7 @@ export const chat_handler = async (
     const name = waContactToName(contact, false);
     let repliedMessageInfo = '';
     const showDetailsOption = message.hasQuotedMsg || message.hasReaction;
+    const reactions: string[] = [];
 
     if (message.hasQuotedMsg) {
       const repliedMessage = await message.getQuotedMessage();
@@ -220,6 +222,25 @@ export const chat_handler = async (
       repliedMsg = emoji.unemojify(repliedMsg);
       repliedMessageInfo =
         repliedName + ' (' + repliedTime + '): ' + repliedMsg;
+    }
+    if (message.hasReaction) {
+      const reactionsList = await message.getReactions();
+      for (let j = 0; j < reactionsList.length; j++) {
+        const reaction = reactionsList[j];
+        let reactionInfo = emoji.unemojify(reaction.id) + ' by: ';
+        for (let k = 0; k < reactionsList[j].senders.length; k++) {
+          const reactionContact = await client.getContactById(
+            reactionsList[j].senders[k].senderId
+          );
+          const reactionContactName = waContactToName(reactionContact, false);
+          if (k === 0) reactionInfo += reactionContactName;
+          else {
+            reactionInfo += ', ';
+            reactionInfo += reactionContactName;
+          }
+        }
+        reactions.push(reactionInfo);
+      }
     }
 
     fmtMsg.push({
@@ -233,6 +254,7 @@ export const chat_handler = async (
       id: encodeURIComponent(message.id._serialized),
       repliedMessage: repliedMessageInfo,
       showDetails: showDetailsOption,
+      reactionsDetails: reactions,
     });
   }
   if (fmtMsg.length === 0) {
@@ -247,6 +269,7 @@ export const chat_handler = async (
       id: '',
       repliedMessage: '',
       showDetails: false,
+      reactionsDetails: [],
     });
   }
   return h.view('chats', {

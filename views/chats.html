@@ -43,7 +43,10 @@
 		<a href="#" id="showDetails" onclick="document.getElementById('details{{this.id}}').classList.toggle('hidden'); return false;">Details</a>
 		<div id="details{{this.id}}" class="hidden">
 	      		{{#if this.hasReaction}}
-	        	<small>This message has reactions</small><br />
+	        	<small>Reactions:</small><br />
+			{{#each this.reactionsDetails}}
+				<small>{{this}}</small><br />
+			{{/each}}
 	      		{{/if}}
 	      		{{#if this.hasQuotedMessage}}
 	        	<small>Replies to:</small><br />
