@@ -185,6 +185,7 @@ export const chat_info_handler = async (
 ) => {
   let chatName = '';
   let chatDescription: string[] = [];
+  const id = encodeURIComponent(request.params.chat_id);
   const chat = await client.getChatById(request.params.chat_id);
   const participantList: {
     id: string;
@@ -194,7 +195,9 @@ export const chat_info_handler = async (
   if (chat.isGroup) {
     const groupChat = chat as GroupChat;
     chatName = groupChat.name;
-    chatDescription = groupChat.description.split('\n');
+    if (groupChat.description != null) {
+       chatDescription = groupChat.description.split('\n');
+    }
     for (let i = 0; i < groupChat.participants.length; i++) {
       const chatParticipant = await client.getContactById(groupChat.participants[i].id._serialized);
       const participantName = waContactToName(chatParticipant, false);
@@ -307,7 +310,7 @@ export const chat_handler = async (
   return h.view('chats', {
     messages: fmtMsg,
     chat_unreadMessages: unreadMessages,
-    chat_id: request.params.chat_id,
+    chat_id: encodeURIComponent(request.params.chat_id),
     groupChat: chat.isGroup,
   });
 };
