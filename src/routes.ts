@@ -191,7 +191,12 @@ export const chat_handler = async (
     time: string;
     fromMe: boolean;
     media: boolean;
+    hasReaction: boolean;
+    hasQuotedMessage: boolean;
     id: string;
+    repliedMessage: string;
+    showDetails: boolean;
+    reactionsDetails: string[];
   }[] = [];
   for (let i = 0; i < messages.length; i++) {
     const message = messages[i];
@@ -203,13 +208,53 @@ export const chat_handler = async (
 
     const contact = await client.getContactById(nameId);
     const name = waContactToName(contact, false);
+    let repliedMessageInfo = '';
+    const showDetailsOption = message.hasQuotedMsg || message.hasReaction;
+    const reactions: string[] = [];
+
+    if (message.hasQuotedMsg) {
+      const repliedMessage = await message.getQuotedMessage();
+      const repliedTime = longNumToDate(repliedMessage.timestamp);
+      const repliedNameId = repliedMessage.author || repliedMessage.from;
+      const repliedContact = await client.getContactById(repliedNameId);
+      const repliedName = waContactToName(repliedContact, false);
+      let repliedMsg = repliedMessage.body;
+      repliedMsg = emoji.unemojify(repliedMsg);
+      repliedMessageInfo =
+        repliedName + ' (' + repliedTime + '): ' + repliedMsg;
+    }
+    if (message.hasReaction) {
+      const reactionsList = await message.getReactions();
+      for (let j = 0; j < reactionsList.length; j++) {
+        const reaction = reactionsList[j];
+        let reactionInfo = emoji.unemojify(reaction.id) + ' by: ';
+        for (let k = 0; k < reactionsList[j].senders.length; k++) {
+          const reactionContact = await client.getContactById(
+            reactionsList[j].senders[k].senderId
+          );
+          const reactionContactName = waContactToName(reactionContact, false);
+          if (k === 0) reactionInfo += reactionContactName;
+          else {
+            reactionInfo += ', ';
+            reactionInfo += reactionContactName;
+          }
+        }
+        reactions.push(reactionInfo);
+      }
+    }
+
     fmtMsg.push({
       from: name,
       msg: msg.map(m => emoji.unemojify(m)),
       time: longNumToDate(time),
       fromMe: fromMe,
       media: message.hasMedia,
+      hasReaction: message.hasReaction,
+      hasQuotedMessage: message.hasQuotedMsg,
       id: encodeURIComponent(message.id._serialized),
+      repliedMessage: repliedMessageInfo,
+      showDetails: showDetailsOption,
+      reactionsDetails: reactions,
     });
   }
   if (fmtMsg.length === 0) {
@@ -219,7 +264,12 @@ export const chat_handler = async (
       time: '',
       fromMe: false,
       media: false,
+      hasReaction: false,
+      hasQuotedMessage: false,
       id: '',
+      repliedMessage: '',
+      showDetails: false,
+      reactionsDetails: [],
     });
   }
   return h.view('chats', {

@@ -5,6 +5,11 @@
 <link href="/public/css/style.css" rel="stylesheet">
 <meta name="theme-color" content="#305">
 <meta name="viewport" content="width=device-width">
+<style>
+  .hidden {
+    display: none;
+  } 
+</style>
 </head>
 <body>
     <nav class="navbar navbar-default">
@@ -32,9 +37,24 @@
         {{/if}}
          ({{this.time}}): {{#each this.msg}} {{this}} <br />{{/each}}
          {{#if this.media}}
-            <a href="/media/{{this.id}}">Download Attachment</a>
+            <a href="/media/{{this.id}}">Download Attachment</a><br />
          {{/if}}
-         
+	<small> {{#if this.showDetails}}
+		<a href="#" id="showDetails" onclick="document.getElementById('details{{this.id}}').classList.toggle('hidden'); return false;">Details</a>
+		<div id="details{{this.id}}" class="hidden">
+	      		{{#if this.hasReaction}}
+	        	<small>Reactions:</small><br />
+			{{#each this.reactionsDetails}}
+				<small>{{this}}</small><br />
+			{{/each}}
+	      		{{/if}}
+	      		{{#if this.hasQuotedMessage}}
+	        	<small>Replies to:</small><br />
+			<small>{{this.repliedMessage}}</small><br />
+	      		{{/if}}
+   		</div>
+		{{/if}}
+	</small>
          <hr /></br />
     {{/each}}
     <form method="post" action="/chats/{{chat_id}}/reply" enctype="multipart/form-data">
