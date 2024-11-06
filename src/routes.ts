@@ -11,7 +11,7 @@ import {
 import {ReqRefDefaults, Request, ResponseToolkit} from '@hapi/hapi';
 import fs from 'fs';
 import * as emoji from 'node-emoji';
-import {WAState} from 'whatsapp-web.js';
+import {WAState, GroupChat} from 'whatsapp-web.js';
 import {removeDiacritics} from './helper';
 
 export const vcard_handler = async (
@@ -178,6 +178,38 @@ export const media_handler = async (
   }
 };
 
+export const chat_info_handler = async (
+  request: Request<ReqRefDefaults>,
+  h: ResponseToolkit<ReqRefDefaults>
+
+) => {
+  let chatName = '';
+  let chatDescription: string[] = [];
+  const chat = await client.getChatById(request.params.chat_id);
+  const participantList: {
+    id: string;
+    contactName: string;
+    isAdmin: boolean;
+  }[] = [];
+  if (chat.isGroup) {
+    const groupChat = chat as GroupChat;
+    chatName = groupChat.name;
+    chatDescription = groupChat.description.split('\n');
+    for (let i = 0; i < groupChat.participants.length; i++) {
+      const chatParticipant = await client.getContactById(groupChat.participants[i].id._serialized);
+      const participantName = waContactToName(chatParticipant, false);
+      participantList.push({
+	id: groupChat.participants[i].id._serialized,
+        contactName: participantName,
+        isAdmin: groupChat.participants[i].isAdmin,
+      });
+    }
+  } else {
+	return h.response('Chat is not a group').code(400);
+  }
+  return h.view('chatinfo', {chatId: request.params.chat_id, chatName: emoji.unemojify(chatName), chatDescription: chatDescription.map(m => emoji.unemojify(m)), participants: participantList});
+};
+
 export const chat_handler = async (
   request: Request<ReqRefDefaults>,
   h: ResponseToolkit<ReqRefDefaults>
@@ -276,6 +308,7 @@ export const chat_handler = async (
     messages: fmtMsg,
     chat_unreadMessages: unreadMessages,
     chat_id: request.params.chat_id,
+    groupChat: chat.isGroup,
   });
 };
 
