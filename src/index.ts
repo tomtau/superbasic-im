@@ -23,6 +23,7 @@ import {
   reply_handler,
   vcard_handler,
   read_all_handler,
+  chat_info_handler,
 } from './routes';
 
 export let server: Server;
@@ -202,6 +203,11 @@ export const init = async function (): Promise<Server> {
       method: 'GET',
       path: '/chats/{chat_id}',
       handler: chat_handler,
+    },
+    {
+      method: 'GET',
+      path: '/chats/{chat_id}/info',
+      handler: chat_info_handler,
     },
     {
       method: 'GET',

@@ -24,6 +24,9 @@
 	      {{#if chat_unreadMessages}}
 	      <li><a href="/chats/{{chat_id}}/seen" class="btn btn-success" id="first-btn">Mark all messages as read</a></li>
 	      {{/if}}
+	      {{#if groupChat}}
+              <li><a href="/chats/{{chat_id}}/info" class="btn btn-success" id="second-btn">Group information</a></li>
+              {{/if}}
             </ul>
           </div><!-- /.navbar-collapse -->
         </div>
