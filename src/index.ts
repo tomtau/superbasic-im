@@ -202,7 +202,12 @@ export const init = async function (): Promise<Server> {
     {
       method: 'GET',
       path: '/chats/{chat_id}',
-      handler: chat_handler,
+      handler: (request, h) => chat_handler(request, h, false),
+    },
+    {
+      method: 'GET',
+      path: '/chats/{chat_id}/allunreadmessages',
+      handler: (request, h) => chat_handler(request, h, true),
     },
     {
       method: 'GET',
