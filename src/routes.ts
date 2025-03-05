@@ -220,11 +220,23 @@ export const chat_info_handler = async (
 
 export const chat_handler = async (
   request: Request<ReqRefDefaults>,
-  h: ResponseToolkit<ReqRefDefaults>
+  h: ResponseToolkit<ReqRefDefaults>,
+  loadAllUnreadMessages: Boolean
 ) => {
   const chat = await client.getChatById(request.params.chat_id);
-  const messages = await chat.fetchMessages({limit: 10});
   const unreadMessages: boolean = chat.unreadCount > 0;
+  let tooManyUnreadMessages: boolean = chat.unreadCount >= 51;
+  let messages;
+  if (loadAllUnreadMessages) {
+    messages = await chat.fetchMessages({limit: chat.unreadCount});
+    tooManyUnreadMessages = false;
+  } else if (chat.unreadCount > 10 && chat.unreadCount < 51) {
+    messages = await chat.fetchMessages({limit: chat.unreadCount});
+  } else if (chat.unreadCount >= 51) {
+    messages = await chat.fetchMessages({limit: 50});
+  } else {
+    messages = await chat.fetchMessages({limit: 10});
+  }
   const fmtMsg: {
     from: string;
     msg: string[];
@@ -315,6 +327,8 @@ export const chat_handler = async (
   return h.view('chats', {
     messages: fmtMsg,
     chat_unreadMessages: unreadMessages,
+    chat_tooManyUnreadMessages: tooManyUnreadMessages,
+    amountUnreadMessages: chat.unreadCount,
     chat_id: encodeURIComponent(request.params.chat_id),
     groupChat: chat.isGroup,
   });
