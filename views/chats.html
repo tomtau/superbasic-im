@@ -21,12 +21,12 @@
           <div>
             <ul class="nav navbar-nav navbar-right">
 	            {{#if chat_unreadMessages}}
-	            <li><a href="/chats/{{chat_id}}/seen" class="btn btn-success" id="first-btn">Mark all messages as read</a></li>
+	            <li><a href="/chats/{{chat_id}}/seen" class="btn btn-success" id="second-btn">Mark all messages as read</a></li>
 	            {{/if}}
 	            {{#if groupChat}}
-              <li><a href="/chats/{{chat_id}}/info" class="btn btn-success" id="second-btn">Group information</a></li>
+              <li><a href="/chats/{{chat_id}}/info" class="btn btn-success" id="third-btn">Group information</a></li>
 	            {{else}}
-	            <li><a href="/chats/{{chat_id}}/vcard" class="btn btn-success" id="second-btn">Download Vcard</a></li>
+	            <li><a href="/chats/{{chat_id}}/vcard" class="btn btn-success" id="fourth-btn">Download Vcard</a></li>
               {{/if}}
               {{#if chat_tooManyUnreadMessages}}
               <li><a href="/chats/{{chat_id}}/allunreadmessages" class="btn btn-success" id="first-btn">Show {{amountUnreadMessages}} unread messages</a></li>
