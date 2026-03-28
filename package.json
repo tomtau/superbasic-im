@@ -23,7 +23,7 @@
     "@hapi/inert": "^7.1.0",
     "@hapi/vision": "^7.0.3",
     "argon2": "^0.40.3",
-    "handlebars": "^4.7.8",
+    "handlebars": "^4.7.9",
     "mime-types": "^2.1.35",
     "node-cache": "^5.1.2",
     "node-emoji": "^2.1.3",
