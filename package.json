@@ -20,7 +20,7 @@
     "@hapi/cookie": "^12.0.1",
     "@hapi/crumb": "^9.0.1",
     "@hapi/hapi": "^21.3.9",
-    "@hapi/inert": "^7.1.0",
+    "@hapi/inert": "^7.1.1",
     "@hapi/vision": "^7.0.3",
     "argon2": "^0.40.3",
     "handlebars": "^4.7.9",
